@@ -12,7 +12,7 @@
     <a href="{{ route('equipos.create') }}" class="btn btn-primary">Crear Nuevo Equipo</a>
     <br><br>
 
-    <!-- Formulario de búsqueda -->
+
     <form action="{{ route('equipos.index') }}" method="GET">
         <input type="text" name="search" placeholder="Buscar por código o descripción..." value="{{ request('search') }}">
         <button type="submit">Buscar</button>

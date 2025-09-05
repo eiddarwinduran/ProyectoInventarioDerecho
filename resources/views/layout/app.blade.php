@@ -41,7 +41,7 @@
     </form>
     </div>
 
-<!-- Ajusta el contenido para que no quede oculto -->
+
 <div class="container mt-5 pt-5">
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>

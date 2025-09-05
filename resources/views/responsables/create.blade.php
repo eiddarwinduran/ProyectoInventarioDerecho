@@ -8,7 +8,6 @@
 <form action="{{ route('responsables.store') }}" method="POST">
             @csrf
 
-            <!-- Datos del equipo -->
             <div class="card mb-4">
                 <div class="card-header bg-primary text-white">Datos del Responsable</div>
                 <div class="card-body">

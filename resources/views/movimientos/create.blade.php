@@ -70,8 +70,8 @@ $(document).ready(function() {
     $("#codigo_text").autocomplete({
         source: equipos,
         select: function(event, ui) {
-            $("#codigo").val(ui.item.value); // Valor real enviado al backend
-            $(this).val(ui.item.label);      // Texto visible al usuario
+            $("#codigo").val(ui.item.value); 
+            $(this).val(ui.item.label); 
             return false;
         }
     });

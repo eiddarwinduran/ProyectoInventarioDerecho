@@ -38,7 +38,7 @@
                 </div>
             </div>
 
-            <!-- Datos de componentes (ocultos si no es CPU) -->
+         
             <div class="card mb-4 d-none" id="componentes-card">
                 <div class="card-header bg-success text-white">Componentes</div>
                 <div class="card-body">
