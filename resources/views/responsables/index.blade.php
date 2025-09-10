@@ -6,7 +6,6 @@
 
     <a href="{{ route('responsables.create') }}" class="btn btn-primary">Agregar Responsable</a>
 
-    {{-- Buscador --}}
     <form action="{{ route('responsables.index') }}" method="GET" style="margin: 20px 0;">
         <input type="text" name="search" placeholder="Buscar" value="{{ request('search') }}">
         <button type="submit">Buscar</button>

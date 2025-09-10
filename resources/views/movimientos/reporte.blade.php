@@ -4,7 +4,6 @@
     <div class="container">
         <h1>Reporte de Movimientos</h1>
 
-        {{-- Formulario de filtro --}}
         <form action="{{ route('movimientos.generarReporte') }}" method="POST" class="mb-4" target="_blank">
             @csrf
             <div class="row g-2">
@@ -27,8 +26,6 @@
             </div>
         </form>
 
-
-        {{-- Tabla de resultados --}}
         @if(isset($movimientos) && $movimientos->count() > 0)
             <table border="1" cellpadding="5" cellspacing="0">
                 <thead>

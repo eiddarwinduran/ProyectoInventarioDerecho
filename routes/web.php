@@ -29,6 +29,8 @@ Route::resource('componentes', ComponenteController::class);
 Route::get('/equipos', [EquipoController::class, 'index'])->name('equipos.index');
 Route::get('/equipos/create', [EquipoController::class, 'create'])->name('equipos.create');
 Route::post('/equipos', [EquipoController::class, 'store'])->name('equipos.store');
+Route::get('/equipos/buscar', [EquipoController::class, 'buscar'])->name('equipos.buscar');
+
 
 // Rutas de Movimientos
 Route::get('movimientos', [MovimientoController::class, 'index'])->name('movimientos.index');
@@ -37,3 +39,4 @@ Route::post('movimientos', [MovimientoController::class, 'store'])->name('movimi
 Route::get('movimientos/buscar', [MovimientoController::class, 'buscar'])->name('movimientos.buscar');
 Route::get('/movimientos/reporte', [MovimientoController::class, 'reporte'])->name('movimientos.reporte');
 Route::post('/movimientos/reporte', [MovimientoController::class, 'generarReporte'])->name('movimientos.generarReporte');
+Route::match(['get', 'post'], '/movimientos/storeMultiple', [MovimientoController::class, 'storeMultiple'])->name('movimientos.storeMultiple');

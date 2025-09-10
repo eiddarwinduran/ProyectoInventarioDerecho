@@ -56,6 +56,36 @@ class MovimientoController extends Controller
         $movimiento = Movimiento::findOrFail($id);
         return view('movimientos.show', compact('movimiento'));
     }
+    public function storeMultiple(Request $request)
+    {
+        if ($request->isMethod('get')) {
+            $equipos = Equipo::all();
+            $responsables = Responsable::all();
+            $ubicaciones = Ubicacion::all();
+            return view('movimientos.storeMultiple', compact('equipos', 'responsables', 'ubicaciones'));
+        }
+
+        $request->validate([
+            'equipos' => 'required|array',
+            'equipos.*' => 'exists:equipos,codigo',
+            'ci' => 'required|exists:responsables,ci',
+            'id_ubicacion' => 'required|exists:ubicaciones,id_ubicacion',
+            'fecha_movimiento'=>'required|date',
+            'detalle' => 'nullable|string',
+        ]);
+
+        foreach ($request->equipos as $codigo) {
+            Movimiento::create([
+                'codigo' => $codigo,
+                'ci' => $request->ci,
+                'id_ubicacion' => $request->id_ubicacion,
+                'fecha_movimiento' => $request->fecha_movimiento,
+                'detalle' => $request->detalle ?? 'Asignación múltiple',
+            ]);
+        }
+
+        return redirect()->route('movimientos.index')->with('success', 'Equipos asignados correctamente.');
+    }
 
 
     public function reporte()
@@ -67,7 +97,7 @@ class MovimientoController extends Controller
         $tipo = $request->input('tipo');   // codigo o ci
         $filtro = $request->input('filtro');
 
-        // Consulta dinámica con componentes incluidos
+        
         $movimientos = Movimiento::with(['equipo.componente', 'responsable', 'ubicacion'])
             ->when($tipo == 'codigo', function ($q) use ($filtro) {
                 $q->whereHas('equipo', function ($query) use ($filtro) {
@@ -81,12 +111,11 @@ class MovimientoController extends Controller
             })
             ->get();
 
-        // Si no pide PDF, mostrar en la vista
         if (!$request->has('pdf')) {
             return view('movimientos.reporte', compact('movimientos', 'tipo', 'filtro'));
         }
 
-        // Generar PDF con TCPDF
+    
         $pdf = new \TCPDF('P', 'mm', 'Letter', true, 'UTF-8', false);
         $pdf->setPrintHeader(false);
         $pdf->AddPage();
@@ -99,7 +128,6 @@ class MovimientoController extends Controller
         $pdf->Cell(0, 8, 'Encargado de Sistemas: Ing. Richard Cruz Pinedo', 0, 1, 'L');
         $pdf->Ln(5);
 
-        // Cabecera tabla
         $pdf->SetFont('helvetica', 'B', 9);
         $pdf->Cell(30, 6, 'Codigo', 1, 0, 'C');
         $pdf->Cell(50, 6, 'Descripcion', 1, 0, 'C');
@@ -108,7 +136,6 @@ class MovimientoController extends Controller
         $pdf->Cell(20, 6, 'Fecha', 1, 0, 'C');
         $pdf->Cell(20, 6, 'Detalle', 1, 1, 'C');
 
-        // Datos
         $pdf->SetFont('helvetica', '', 8);
         foreach ($movimientos as $mov) {
             $codigo = $mov->equipo->codigo;
@@ -118,7 +145,7 @@ class MovimientoController extends Controller
             $fecha = $mov->fecha_movimiento ? \Carbon\Carbon::parse($mov->fecha_movimiento)->format('Y-m-d') : '';
             $detalle = substr($mov->detalle, 0, 30);
 
-            // Definimos anchos de columnas
+            
             $w_codigo = 30;
             $w_desc = 50;
             $w_resp = 40;
@@ -126,10 +153,8 @@ class MovimientoController extends Controller
             $w_fecha = 20;
             $w_det = 20;
 
-            // Altura base
             $h = 6;
 
-            // Calculamos número de líneas para las columnas que pueden crecer
             $nb = max(
                 $pdf->getNumLines($codigo, $w_codigo),
                 $pdf->getNumLines($descripcion, $w_desc),
@@ -139,13 +164,12 @@ class MovimientoController extends Controller
                 $pdf->getNumLines($detalle, $w_det)
             );
 
-            $rowHeight = $h * $nb; // altura máxima de la fila
+            $rowHeight = $h * $nb; 
 
-            // Guardamos coordenada inicial
+          
             $x = $pdf->GetX();
             $y = $pdf->GetY();
 
-            // Imprimir cada celda con la misma altura
             $pdf->MultiCell($w_codigo, $rowHeight, $codigo, 1, 'C', 0, 0, '', '', true, 0, false, true, $rowHeight, 'M');
             $pdf->MultiCell($w_desc, $rowHeight, $descripcion, 1, 'L', 0, 0, '', '', true, 0, false, true, $rowHeight, 'M');
             $pdf->MultiCell($w_resp, $rowHeight, $responsable, 1, 'C', 0, 0, '', '', true, 0, false, true, $rowHeight, 'M');

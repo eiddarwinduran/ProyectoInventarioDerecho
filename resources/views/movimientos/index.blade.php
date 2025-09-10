@@ -4,6 +4,10 @@
     <div class="container">
         <h1>Resultado</h1>
 
+        <div>
+            <a href="{{ route('movimientos.create') }}" class="btn btn-primary">Asignar Responsable</a>
+            <a href="{{ route('movimientos.storeMultiple') }}" class="btn btn-primary">Asignacion Multiple</a>
+        </div>
         @if(isset($query))
             <p>Resultados de búsqueda para: <strong>{{ $query }}</strong></p>
         @endif
@@ -17,6 +21,7 @@
                     <th>Responsable</th>
                     <th>Ubicación</th>
                     <th>Fecha</th>
+                    <th>Detalle</th>
                 </tr>
             </thead>
             <tbody>
@@ -27,7 +32,8 @@
                         <td>{{ $movimiento->equipo->descripcion }}</td>
                         <td>{{ $movimiento->responsable->nombre ?? '' }} {{ $movimiento->responsable->apellido ?? '' }}</td>
                         <td>{{ $movimiento->ubicacion->nombre_ubicacion ?? 'N/A' }}</td>
-                        <td>{{ $movimiento->fecha_movimiento }}</td>
+                        <td>{{ \Carbon\Carbon::parse($movimiento->fecha_movimiento)->format('Y-m-d') }}</td>
+                        <td>{{ $movimiento->detalle }}</td>
                     </tr>
                 @empty
                     <tr>

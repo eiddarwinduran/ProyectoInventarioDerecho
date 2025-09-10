@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Equipo;
+use App\Models\Responsable;
+use App\Models\Ubicacion;
 use App\Models\Componente;
+use App\Models\Movimiento;
 
 class EquipoController extends Controller
 {
-    // Mostrar todos los equipos con sus componentes
     public function index(Request $request)
     {
         $search = $request->input('search');
@@ -23,13 +25,33 @@ class EquipoController extends Controller
         return view('equipos.index', compact('equipos'));
     }
 
+    public function buscar(Request $request)
+{
+    $q = $request->input('q');
+
+    $equipos = Equipo::when($q, function($query, $q) {
+        $query->where('codigo', 'like', "%$q%")
+              ->orWhere('descripcion', 'like', "%$q%");
+    })->get();
+
+    $results = $equipos->map(function($eq){
+        return [
+            'id' => $eq->codigo,
+            'text' => $eq->codigo
+        ];
+    });
+
+    return response()->json($results);
+}
+
 
 
     public function create()
     {
-        return view('equipos.create');
+        $responsables = Responsable::all();
+        $ubicaciones = Ubicacion::all();
+        return view('equipos.create', compact('responsables', 'ubicaciones'));
     }
-
     public function store(Request $request)
     {
         $request->validate([
@@ -38,17 +60,19 @@ class EquipoController extends Controller
             'estado' => 'nullable',
             'tipo' => 'required|in:monitor,cpu',
 
-            // Solo obligatorios si es CPU
             'procesador' => 'required_if:tipo,cpu',
             'tarjeta_madre' => 'required_if:tipo,cpu',
             'ram' => 'required_if:tipo,cpu',
             'disco_duro' => 'required_if:tipo,cpu',
             'tarjeta_video' => 'required_if:tipo,cpu',
             'tarjeta_red' => 'required_if:tipo,cpu',
+
+            'ci' => 'required|exists:responsables,ci',
+            'id_ubicacion' => 'required|exists:ubicaciones,id_ubicacion',
+            'detalle' => 'nullable|string',
         ]);
 
         $componente = null;
-
         if ($request->tipo === 'cpu') {
             $componente = Componente::create([
                 'procesador' => $request->procesador,
@@ -60,7 +84,7 @@ class EquipoController extends Controller
             ]);
         }
 
-        Equipo::create([
+        $equipo = Equipo::create([
             'codigo' => $request->codigo,
             'descripcion' => $request->descripcion,
             'estado' => $request->estado,
@@ -68,7 +92,15 @@ class EquipoController extends Controller
             'id_comp' => $componente ? $componente->id_comp : null,
         ]);
 
-        return redirect()->route('equipos.index')->with('success', 'Equipo registrado correctamente.');
+        Movimiento::create([
+            'codigo' => $equipo->codigo,
+            'ci' => $request->ci,
+            'id_ubicacion' => $request->id_ubicacion,
+            'detalle' => $request->detalle,
+            'fecha_movimiento' => now(), 
+        ]);
+
+        return redirect()->route('equipos.index')->with('success', 'Equipo y movimiento registrados correctamente.');
     }
 
 }

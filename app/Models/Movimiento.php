@@ -11,7 +11,7 @@ class Movimiento extends Model
 
     protected $table = 'movimientos';
     protected $primaryKey = 'id_movimiento';
-    public $timestamps = false; // ya que solo usas fecha_movimiento con default
+    public $timestamps = false; 
 
     protected $fillable = [
         'codigo',
@@ -21,19 +21,16 @@ class Movimiento extends Model
         'detalle'
     ];
 
-    // Relación con Equipo
     public function equipo()
     {
         return $this->belongsTo(Equipo::class, 'codigo', 'codigo');
     }
 
-    // Relación con Responsable
     public function responsable()
     {
         return $this->belongsTo(Responsable::class, 'ci', 'ci');
     }
 
-    // Relación con Ubicación
     public function ubicacion()
     {
         return $this->belongsTo(Ubicacion::class, 'id_ubicacion', 'id_ubicacion');
