@@ -60,11 +60,17 @@
                     </div>
                     <div class="mb-3">
                         <label for="tarjeta_video" class="form-label">Tarjeta de Video</label>
-                        <input type="text" name="tarjeta_video" class="form-control">
+                        <select name="tarjeta_video" class="form-select">
+                            <option value="Si">Si</option>
+                            <option value="No">No</option>
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="tarjeta_red" class="form-label">Tarjeta de Red</label>
-                        <input type="text" name="tarjeta_red" class="form-control">
+                        <select name="tarjeta_red" class="form-select">
+                            <option value="Si">Si</option>
+                            <option value="No">No</option>
+                        </select>
                     </div>
                 </div>
             </div>

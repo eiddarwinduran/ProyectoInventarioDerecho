@@ -41,12 +41,12 @@
                     <td>{{ $equipo->codigo }}</td>
                     <td>{{ $equipo->descripcion }}</td>
                     <td>{{ $equipo->estado }}</td>
-                    <td>{{ $equipo->componente->procesador ?? 'N/A' }}</td>
-                    <td>{{ $equipo->componente->tarjeta_madre ?? 'N/A' }}</td>
-                    <td>{{ $equipo->componente->ram ?? 'N/A' }}</td>
-                    <td>{{ $equipo->componente->disco_duro ?? 'N/A' }}</td>
-                    <td>{{ $equipo->componente->tarjeta_video ?? 'N/A' }}</td>
-                    <td>{{ $equipo->componente->tarjeta_red ?? 'N/A' }}</td>
+                    <td>{{ $equipo->componente->procesador ?? '' }}</td>
+                    <td>{{ $equipo->componente->tarjeta_madre ?? '' }}</td>
+                    <td>{{ $equipo->componente->ram ?? '' }}</td>
+                    <td>{{ $equipo->componente->disco_duro ?? '' }}</td>
+                    <td>{{ $equipo->componente->tarjeta_video ?? '' }}</td>
+                    <td>{{ $equipo->componente->tarjeta_red ?? '' }}</td>
                 </tr>
             @empty
                 <tr>

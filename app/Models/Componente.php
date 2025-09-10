@@ -8,7 +8,7 @@ class Componente extends Model
 {
     protected $table = 'componentes';
     protected $primaryKey = 'id_comp';
-    public $timestamps = false; // Evita problemas con created_at y updated_at
+    public $timestamps = false; 
 
     protected $fillable = [
         'procesador',

@@ -12,13 +12,13 @@ class ResponsableController extends Controller
         $search = $request->input('search');
 
         $responsables = Responsable::when($search, function ($query, $search) {
-                return $query->where('nombre', 'like', "%{$search}%")
-                             ->orWhere('apellido', 'like', "%{$search}%")
-                             ->orWhere('ci', 'like', "%{$search}%")
-                             ->orWhere('cargo', 'like', "%{$search}%")
-                             ->orWhere('telefono', 'like', "%{$search}%")
-                             ->orWhere('correo', 'like', "%{$search}%");
-            })
+            return $query->where('nombre', 'like', "%{$search}%")
+                ->orWhere('apellido', 'like', "%{$search}%")
+                ->orWhere('ci', 'like', "%{$search}%")
+                ->orWhere('cargo', 'like', "%{$search}%")
+                ->orWhere('telefono', 'like', "%{$search}%")
+                ->orWhere('correo', 'like', "%{$search}%");
+        })
             ->get();
 
         return view('responsables.index', compact('responsables'));
