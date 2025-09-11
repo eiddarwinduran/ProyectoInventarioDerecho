@@ -7,7 +7,13 @@
         <div>
             <a href="{{ route('movimientos.create') }}" class="btn btn-primary">Asignar Responsable</a>
             <a href="{{ route('movimientos.storeMultiple') }}" class="btn btn-primary">Asignacion Multiple</a>
+            <br><br>
+            <form action="{{ route('ubicaciones.buscar') }}" method="GET">
+                <input type="text" name="search" placeholder="Buscar" value="{{ request('search') }}">
+                <button type="submit">Buscar</button>
+            </form>
         </div>
+        <br>
         @if(isset($query))
             <p>Resultados de búsqueda para: <strong>{{ $query }}</strong></p>
         @endif
