@@ -1,10 +1,10 @@
 @extends('layout.app')
 
 @section('content')
-<div>
-    <a href="{{ route('movimientos.create') }}" class="btn btn-primary">Asignar Responsable</a>
-    <a href="{{ route('movimientos.storeMultiple') }}" class="btn btn-primary">Asignacion Multiple</a>
-</div>
+    <div>
+        <a href="{{ route('movimientos.create') }}" class="btn btn-primary">Asignar Responsable</a>
+        <a href="{{ route('movimientos.storeMultiple') }}" class="btn btn-primary">Asignacion Multiple</a>
+    </div>
 
     <form action="{{ route('movimientos.store') }}" method="POST">
         @csrf
@@ -14,7 +14,13 @@
             <input type="text" id="codigo_text" class="form-control" placeholder="Escribe código del equipo" required>
             <input type="hidden" name="codigo" id="codigo">
         </div>
-
+        <div class="mb-3">
+            <label for="estado" class="form-label">Estado</label>
+            <select name="estado" class="form-select">
+                <option value="Activo">Activo</option>
+                <option value="Baja">Baja</option>
+            </select>
+        </div>
         <div class="mb-3">
             <label for="ci_text" class="form-label">Responsable</label>
             <input type="text" id="ci_text" class="form-control" placeholder="Escribe CI o nombre del responsable" required>
@@ -29,7 +35,7 @@
 
         <div class="mb-3">
             <label for="fecha_movimiento" class="form-label">Fecha Movimiento</label>
-            <input type="date" name="fecha_movimiento" id="fecha_movimiento" class="form-control" required>
+            <input type="date" name="fecha_movimiento" id="fecha_movimiento" value="{{ date('Y-m-d') }}" class="form-control" required >
         </div>
 
         <div class="mb-3">
@@ -51,19 +57,19 @@
                 @foreach($equipos as $eq)
                     { label: "{{ $eq->codigo }} ", value: "{{ $eq->codigo }}" },
                 @endforeach
-        ];
+            ];
 
             var responsables = [
                 @foreach($responsables as $resp)
-                    { label: "{{ $resp->ci }} ", value: "{{ $resp->ci }}" },
+                    { label: "{{ $resp->ci }} {{ $resp->nombre }} {{ $resp->apellido }} ", value: "{{ $resp->ci }}" },
                 @endforeach
-        ];
+            ];
 
             var ubicaciones = [
                 @foreach($ubicaciones as $ubi)
                     { label: "{{ $ubi->nombre_ubicacion }}", value: "{{ $ubi->id_ubicacion }}" },
                 @endforeach
-        ];
+            ];
 
             $("#codigo_text").autocomplete({
                 source: equipos,

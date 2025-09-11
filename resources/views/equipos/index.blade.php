@@ -25,7 +25,6 @@
                 <th>ID Equipo</th>
                 <th>Código</th>
                 <th>Descripción</th>
-                <th>Estado</th>
                 <th>Procesador</th>
                 <th>Tarjeta Madre</th>
                 <th>RAM</th>
@@ -40,7 +39,6 @@
                     <td>{{ $equipo->id_equipo }}</td>
                     <td>{{ $equipo->codigo }}</td>
                     <td>{{ $equipo->descripcion }}</td>
-                    <td>{{ $equipo->estado }}</td>
                     <td>{{ $equipo->componente->procesador ?? '' }}</td>
                     <td>{{ $equipo->componente->tarjeta_madre ?? '' }}</td>
                     <td>{{ $equipo->componente->ram ?? '' }}</td>

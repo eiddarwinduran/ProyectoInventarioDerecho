@@ -31,6 +31,7 @@
                 <thead>
                     <tr>
                         <th>Equipo</th>
+                        <th>Estado</th>
                         <th>Responsable</th>
                         <th>Ubicación</th>
                         <th>Fecha</th>
@@ -41,6 +42,7 @@
                     @foreach($movimientos as $mov)
                         <tr>
                             <td>{{ $mov->equipo->codigo }} - {{ $mov->equipo->descripcion }}</td>
+                            <td>{{ $mov->estado }}</td>
                             <td>{{ $mov->responsable->ci }} - {{ $mov->responsable->nombre }} {{ $mov->responsable->apellido }}</td>
                             <td>{{ $mov->ubicacion->nombre_ubicacion }}</td>
                             <td>{{ $mov->fecha_movimiento }}</td>

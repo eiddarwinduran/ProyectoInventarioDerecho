@@ -26,23 +26,23 @@ class EquipoController extends Controller
     }
 
     public function buscar(Request $request)
-{
-    $q = $request->input('q');
+    {
+        $q = $request->input('q');
 
-    $equipos = Equipo::when($q, function($query, $q) {
-        $query->where('codigo', 'like', "%$q%")
-              ->orWhere('descripcion', 'like', "%$q%");
-    })->get();
+        $equipos = Equipo::when($q, function ($query, $q) {
+            $query->where('codigo', 'like', "%$q%")
+                ->orWhere('descripcion', 'like', "%$q%");
+        })->get();
 
-    $results = $equipos->map(function($eq){
-        return [
-            'id' => $eq->codigo,
-            'text' => $eq->codigo
-        ];
-    });
+        $results = $equipos->map(function ($eq) {
+            return [
+                'id' => $eq->codigo,
+                'text' => $eq->codigo
+            ];
+        });
 
-    return response()->json($results);
-}
+        return response()->json($results);
+    }
 
 
 
@@ -57,7 +57,6 @@ class EquipoController extends Controller
         $request->validate([
             'codigo' => 'required|unique:equipos,codigo',
             'descripcion' => 'required',
-            'estado' => 'nullable',
             'tipo' => 'required|in:monitor,cpu',
 
             'procesador' => 'required_if:tipo,cpu',
@@ -87,7 +86,6 @@ class EquipoController extends Controller
         $equipo = Equipo::create([
             'codigo' => $request->codigo,
             'descripcion' => $request->descripcion,
-            'estado' => $request->estado,
             'tipo' => $request->tipo,
             'id_comp' => $componente ? $componente->id_comp : null,
         ]);
@@ -96,8 +94,9 @@ class EquipoController extends Controller
             'codigo' => $equipo->codigo,
             'ci' => $request->ci,
             'id_ubicacion' => $request->id_ubicacion,
+            'estado' => $request->estado,
             'detalle' => $request->detalle,
-            'fecha_movimiento' => now(), 
+            'fecha_movimiento' => now(),
         ]);
 
         return redirect()->route('equipos.index')->with('success', 'Equipo y movimiento registrados correctamente.');

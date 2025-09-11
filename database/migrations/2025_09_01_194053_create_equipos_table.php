@@ -10,7 +10,7 @@ return new class extends Migration {
             $table->id('id_equipo');
             $table->string('codigo', 50)->unique();
             $table->text('descripcion');
-            $table->string('estado', 100)->nullable();
+
             
             // Relación con componentes
             $table->unsignedBigInteger('id_comp')->nullable();

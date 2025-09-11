@@ -30,6 +30,7 @@ class MovimientoController extends Controller
     {
         $validated = $request->validate([
             'codigo' => 'required|exists:equipos,codigo',
+            'estado' => 'nullable',
             'ci' => 'required|exists:responsables,ci',
             'id_ubicacion' => 'required|exists:ubicaciones,id_ubicacion',
             'detalle' => 'nullable|string',
@@ -46,6 +47,7 @@ class MovimientoController extends Controller
         $movimientos = Movimiento::with(['equipo', 'responsable', 'ubicacion'])
             ->where('codigo', 'like', "%{$query}%")
             ->orWhere('ci', 'like', "%{$query}%")
+            ->orWhere("estado", "like", "%{$query}%")
             ->orWhere('detalle', 'like', "%{$query}%")
             ->get();
 
@@ -70,7 +72,8 @@ class MovimientoController extends Controller
             'equipos.*' => 'exists:equipos,codigo',
             'ci' => 'required|exists:responsables,ci',
             'id_ubicacion' => 'required|exists:ubicaciones,id_ubicacion',
-            'fecha_movimiento'=>'required|date',
+            'fecha_movimiento' => 'required|date',
+            'estado' => 'nullable',
             'detalle' => 'nullable|string',
         ]);
 
@@ -79,6 +82,7 @@ class MovimientoController extends Controller
                 'codigo' => $codigo,
                 'ci' => $request->ci,
                 'id_ubicacion' => $request->id_ubicacion,
+                'estado' => $request->estado,
                 'fecha_movimiento' => $request->fecha_movimiento,
                 'detalle' => $request->detalle ?? 'Asignación múltiple',
             ]);
@@ -97,7 +101,6 @@ class MovimientoController extends Controller
         $tipo = $request->input('tipo');   // codigo o ci
         $filtro = $request->input('filtro');
 
-        
         $movimientos = Movimiento::with(['equipo.componente', 'responsable', 'ubicacion'])
             ->when($tipo == 'codigo', function ($q) use ($filtro) {
                 $q->whereHas('equipo', function ($query) use ($filtro) {
@@ -115,7 +118,7 @@ class MovimientoController extends Controller
             return view('movimientos.reporte', compact('movimientos', 'tipo', 'filtro'));
         }
 
-    
+        // Crear PDF
         $pdf = new \TCPDF('P', 'mm', 'Letter', true, 'UTF-8', false);
         $pdf->setPrintHeader(false);
         $pdf->AddPage();
@@ -128,14 +131,17 @@ class MovimientoController extends Controller
         $pdf->Cell(0, 8, 'Encargado de Sistemas: Ing. Richard Cruz Pinedo', 0, 1, 'L');
         $pdf->Ln(5);
 
+        // Cabecera
         $pdf->SetFont('helvetica', 'B', 9);
-        $pdf->Cell(30, 6, 'Codigo', 1, 0, 'C');
-        $pdf->Cell(50, 6, 'Descripcion', 1, 0, 'C');
-        $pdf->Cell(40, 6, 'Responsable', 1, 0, 'C');
-        $pdf->Cell(30, 6, 'Ubicacion', 1, 0, 'C');
-        $pdf->Cell(20, 6, 'Fecha', 1, 0, 'C');
-        $pdf->Cell(20, 6, 'Detalle', 1, 1, 'C');
+        $pdf->Cell(25, 6, 'Codigo', 1, 0, 'C');
+        $pdf->Cell(45, 6, 'Descripcion', 1, 0, 'C');
+        $pdf->Cell(35, 6, 'Responsable', 1, 0, 'C');
+        $pdf->Cell(25, 6, 'Ubicacion', 1, 0, 'C');
+        $pdf->Cell(18, 6, 'Fecha', 1, 0, 'C');
+        $pdf->Cell(20, 6, 'Estado', 1, 0, 'C');
+        $pdf->Cell(27, 6, 'Detalle', 1, 1, 'C');
 
+        // Datos
         $pdf->SetFont('helvetica', '', 8);
         foreach ($movimientos as $mov) {
             $codigo = $mov->equipo->codigo;
@@ -143,15 +149,16 @@ class MovimientoController extends Controller
             $responsable = $mov->responsable->nombre . " " . $mov->responsable->apellido;
             $ubicacion = $mov->ubicacion->nombre_ubicacion ?? 'N/A';
             $fecha = $mov->fecha_movimiento ? \Carbon\Carbon::parse($mov->fecha_movimiento)->format('Y-m-d') : '';
+            $estado = $mov->estado ?? 'N/A'; // <-- nuevo campo
             $detalle = substr($mov->detalle, 0, 30);
 
-            
-            $w_codigo = 30;
-            $w_desc = 50;
-            $w_resp = 40;
-            $w_ubi = 30;
-            $w_fecha = 20;
-            $w_det = 20;
+            $w_codigo = 25;
+            $w_desc = 45;
+            $w_resp = 35;
+            $w_ubi = 25;
+            $w_fecha = 18;
+            $w_estado = 20;
+            $w_det = 27;
 
             $h = 6;
 
@@ -161,27 +168,22 @@ class MovimientoController extends Controller
                 $pdf->getNumLines($responsable, $w_resp),
                 $pdf->getNumLines($ubicacion, $w_ubi),
                 $pdf->getNumLines($fecha, $w_fecha),
+                $pdf->getNumLines($estado, $w_estado),
                 $pdf->getNumLines($detalle, $w_det)
             );
 
-            $rowHeight = $h * $nb; 
+            $rowHeight = $h * $nb;
 
-          
-            $x = $pdf->GetX();
-            $y = $pdf->GetY();
-
-            $pdf->MultiCell($w_codigo, $rowHeight, $codigo, 1, 'C', 0, 0, '', '', true, 0, false, true, $rowHeight, 'M');
-            $pdf->MultiCell($w_desc, $rowHeight, $descripcion, 1, 'L', 0, 0, '', '', true, 0, false, true, $rowHeight, 'M');
-            $pdf->MultiCell($w_resp, $rowHeight, $responsable, 1, 'C', 0, 0, '', '', true, 0, false, true, $rowHeight, 'M');
-            $pdf->MultiCell($w_ubi, $rowHeight, $ubicacion, 1, 'C', 0, 0, '', '', true, 0, false, true, $rowHeight, 'M');
-            $pdf->MultiCell($w_fecha, $rowHeight, $fecha, 1, 'C', 0, 0, '', '', true, 0, false, true, $rowHeight, 'M');
-            $pdf->MultiCell($w_det, $rowHeight, $detalle, 1, 'L', 0, 1, '', '', true, 0, false, true, $rowHeight, 'M');
+            $pdf->MultiCell($w_codigo, $rowHeight, $codigo, 1, 'C', 0, 0);
+            $pdf->MultiCell($w_desc, $rowHeight, $descripcion, 1, 'L', 0, 0);
+            $pdf->MultiCell($w_resp, $rowHeight, $responsable, 1, 'C', 0, 0);
+            $pdf->MultiCell($w_ubi, $rowHeight, $ubicacion, 1, 'C', 0, 0);
+            $pdf->MultiCell($w_fecha, $rowHeight, $fecha, 1, 'C', 0, 0);
+            $pdf->MultiCell($w_estado, $rowHeight, $estado, 1, 'C', 0, 0); // <-- estado agregado
+            $pdf->MultiCell($w_det, $rowHeight, $detalle, 1, 'L', 0, 1);
         }
-
-
 
         $pdf->Output('Reporte_Movimientos.pdf', 'I');
     }
-
 
 }

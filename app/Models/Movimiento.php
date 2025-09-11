@@ -17,6 +17,7 @@ class Movimiento extends Model
         'codigo',
         'ci',
         'id_ubicacion',
+        'estado',
         'fecha_movimiento',
         'detalle'
     ];
