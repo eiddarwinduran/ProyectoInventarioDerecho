@@ -21,13 +21,25 @@ class UbicacionController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nombre_ubicacion' => 'required',
-            'descripcion' => 'nullable',
+            'nombre_ubicacion' => 'required|string|max:255',
+            'descripcion' => 'nullable|string',
         ]);
 
         Ubicacion::create($validated);
 
         return redirect()->route('ubicaciones.index')->with('success', 'Ubicación creada correctamente');
+    }
+
+    public function buscar(Request $request)
+    {
+        $q = $request->input('q');
+
+        $ubicaciones = Ubicacion::when($q, function ($query, $q) {
+            $query->where('nombre_ubicacion', 'like', "%$q%")
+                  ->orWhere('descripcion', 'like', "%$q%");
+        })->get();
+
+        return view('ubicaciones.index', compact('ubicaciones'));
     }
 
     public function edit(Ubicacion $ubicacion)
@@ -37,7 +49,13 @@ class UbicacionController extends Controller
 
     public function update(Request $request, Ubicacion $ubicacion)
     {
-        $ubicacion->update($request->all());
+        $validated = $request->validate([
+            'nombre_ubicacion' => 'required|string|max:255',
+            'descripcion' => 'nullable|string',
+        ]);
+
+        $ubicacion->update($validated);
+
         return redirect()->route('ubicaciones.index')->with('success', 'Ubicación actualizada correctamente');
     }
 

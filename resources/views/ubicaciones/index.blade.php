@@ -4,6 +4,10 @@
     <h1>Lista de Ubicaciones</h1>
 
     <a href="{{ route('ubicaciones.create') }}" class="btn btn-primary">Agregar Ubicación</a>
+    <form action="{{ route('ubicaciones.buscar') }}" method="GET">
+        <input type="text" name="search" placeholder="Buscar" value="{{ request('search') }}">
+        <button type="submit">Buscar</button>
+    </form>
 
     <table border="1" cellpadding="5" cellspacing="0">
         <thead>

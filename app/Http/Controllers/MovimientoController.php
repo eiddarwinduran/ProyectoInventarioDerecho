@@ -42,13 +42,21 @@ class MovimientoController extends Controller
     }
     public function buscar(Request $request)
     {
-        $query = $request->input('q'); // ejemplo: ?q=palabra
+        $query = $request->input('q'); 
 
         $movimientos = Movimiento::with(['equipo', 'responsable', 'ubicacion'])
             ->where('codigo', 'like', "%{$query}%")
-            ->orWhere('ci', 'like', "%{$query}%")
+            ->orWhereHas('responsable', function ($q) use ($query) {
+                $q->where('nombre', 'like', "%{$query}%")
+                ->orWhere('apellido', 'like', "%{$query}%")
+                    ->orWhere('ci', 'like', "%{$query}%");
+            })
             ->orWhere("estado", "like", "%{$query}%")
             ->orWhere('detalle', 'like', "%{$query}%")
+            ->orWhereHas('ubicacion', function ($q) use ($query) {
+                $q->where('nombre_ubicacion', 'like', "%{$query}%")
+                    ->orWhere('descripcion', 'like', "%{$query}%");
+            })
             ->get();
 
         return view('movimientos.index', compact('movimientos'));
@@ -98,8 +106,9 @@ class MovimientoController extends Controller
     }
     public function generarReporte(Request $request)
     {
-        $tipo = $request->input('tipo');   // codigo o ci
+        $tipo = $request->input('tipo');   // codigo, ci o ubicacion
         $filtro = $request->input('filtro');
+        $accion = $request->input('accion');
 
         $movimientos = Movimiento::with(['equipo.componente', 'responsable', 'ubicacion'])
             ->when($tipo == 'codigo', function ($q) use ($filtro) {
@@ -109,16 +118,25 @@ class MovimientoController extends Controller
             })
             ->when($tipo == 'ci', function ($q) use ($filtro) {
                 $q->whereHas('responsable', function ($query) use ($filtro) {
-                    $query->where('ci', 'like', "%$filtro%");
+                    $query->where('ci', 'like', "%$filtro%")
+                    ->orwhere('nombre', 'like', "%$filtro%")
+                    ->orwhere('apellido', 'like', "%$filtro%");
+                });
+            })
+            ->when($tipo == 'ubicacion', function ($q) use ($filtro) {
+                $q->whereHas('ubicacion', function ($query) use ($filtro) {
+                    $query->where('nombre_ubicacion', 'like', "%$filtro%")
+                        ->orWhere('descripcion', 'like', "%$filtro%");
                 });
             })
             ->get();
 
-        if (!$request->has('pdf')) {
+        //Acción Buscar (mostrar en vista)
+        if ($accion === 'buscar') {
             return view('movimientos.reporte', compact('movimientos', 'tipo', 'filtro'));
         }
 
-        // Crear PDF
+        // Acción PDF
         $pdf = new \TCPDF('P', 'mm', 'Letter', true, 'UTF-8', false);
         $pdf->setPrintHeader(false);
         $pdf->AddPage();
@@ -131,7 +149,6 @@ class MovimientoController extends Controller
         $pdf->Cell(0, 8, 'Encargado de Sistemas: Ing. Richard Cruz Pinedo', 0, 1, 'L');
         $pdf->Ln(5);
 
-        // Cabecera
         $pdf->SetFont('helvetica', 'B', 9);
         $pdf->Cell(25, 6, 'Codigo', 1, 0, 'C');
         $pdf->Cell(45, 6, 'Descripcion', 1, 0, 'C');
@@ -141,7 +158,7 @@ class MovimientoController extends Controller
         $pdf->Cell(20, 6, 'Estado', 1, 0, 'C');
         $pdf->Cell(27, 6, 'Detalle', 1, 1, 'C');
 
-        // Datos
+   
         $pdf->SetFont('helvetica', '', 8);
         foreach ($movimientos as $mov) {
             $codigo = $mov->equipo->codigo;
@@ -149,7 +166,7 @@ class MovimientoController extends Controller
             $responsable = $mov->responsable->nombre . " " . $mov->responsable->apellido;
             $ubicacion = $mov->ubicacion->nombre_ubicacion ?? 'N/A';
             $fecha = $mov->fecha_movimiento ? \Carbon\Carbon::parse($mov->fecha_movimiento)->format('Y-m-d') : '';
-            $estado = $mov->estado ?? 'N/A'; // <-- nuevo campo
+            $estado = $mov->estado ?? 'N/A';
             $detalle = substr($mov->detalle, 0, 30);
 
             $w_codigo = 25;
@@ -179,7 +196,7 @@ class MovimientoController extends Controller
             $pdf->MultiCell($w_resp, $rowHeight, $responsable, 1, 'C', 0, 0);
             $pdf->MultiCell($w_ubi, $rowHeight, $ubicacion, 1, 'C', 0, 0);
             $pdf->MultiCell($w_fecha, $rowHeight, $fecha, 1, 'C', 0, 0);
-            $pdf->MultiCell($w_estado, $rowHeight, $estado, 1, 'C', 0, 0); // <-- estado agregado
+            $pdf->MultiCell($w_estado, $rowHeight, $estado, 1, 'C', 0, 0);
             $pdf->MultiCell($w_det, $rowHeight, $detalle, 1, 'L', 0, 1);
         }
 

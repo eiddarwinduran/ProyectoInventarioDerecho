@@ -19,8 +19,8 @@ Route::get('/responsables/create', [ResponsableController::class, 'create'])->na
 Route::post('/responsables', [ResponsableController::class, 'store'])->name('responsables.store');
 
 // Rutas de Ubicaciones
-Route::resource('ubicaciones', UbicacionController::class);
-
+Route::resource('ubicaciones', UbicacionController::class)->except(['show']);
+Route::get('ubicaciones/buscar', [UbicacionController::class, 'buscar'])->name('ubicaciones.buscar');
 // Rutas de Componentes
 Route::resource('componentes', ComponenteController::class);
 

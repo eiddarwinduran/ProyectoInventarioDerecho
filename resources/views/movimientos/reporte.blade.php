@@ -11,17 +11,18 @@
                     <select name="tipo" class="form-select" required>
                         <option value="">-- Filtrar por --</option>
                         <option value="codigo">Código de Equipo</option>
-                        <option value="ci">CI Responsable</option>
+                        <option value="ci">Responsable</option>
+                        <option value="ubicacion">Ubicacion</option>
                     </select>
                 </div>
                 <div class="col-md-4">
                     <input type="text" name="filtro" class="form-control" placeholder="Escribe el valor" required>
                 </div>
                 <div class="col-md-2">
-                    <button type="submit" class="btn btn-primary">Buscar</button>
+                    <button type="submit" class="btn btn-primary" name="accion" value="buscar">Buscar</button>
                 </div>
                 <div class="col-md-2">
-                    <button type="submit" name="pdf" value="1" class="btn btn-danger">Exportar PDF</button>
+                    <button type="submit" name="pdf" value="1" class="btn btn-danger" name="accion" value="pdf">Exportar PDF</button>
                 </div>
             </div>
         </form>
@@ -43,9 +44,9 @@
                         <tr>
                             <td>{{ $mov->equipo->codigo }} - {{ $mov->equipo->descripcion }}</td>
                             <td>{{ $mov->estado }}</td>
-                            <td>{{ $mov->responsable->ci }} - {{ $mov->responsable->nombre }} {{ $mov->responsable->apellido }}</td>
+                            <td>{{ $mov->responsable->nombre }} {{ $mov->responsable->apellido }}</td>
                             <td>{{ $mov->ubicacion->nombre_ubicacion }}</td>
-                            <td>{{ $mov->fecha_movimiento }}</td>
+                            <td>{{ \Carbon\Carbon::parse($mov->fecha_movimiento)->format('Y-m-d') }}</td>
                             <td>{{ $mov->detalle }}</td>
                         </tr>
                     @endforeach
