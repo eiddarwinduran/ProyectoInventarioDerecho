@@ -19,10 +19,10 @@
     </form>
     <br>
 
-    <table border="1" cellpadding="5" cellspacing="0">
-        <thead>
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark text-center">
             <tr>
-                <th>ID Equipo</th>
+                <th>ID</th>
                 <th>Código</th>
                 <th>Descripción</th>
                 <th>Procesador</th>

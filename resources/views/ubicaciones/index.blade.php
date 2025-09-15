@@ -6,12 +6,12 @@
     <a href="{{ route('ubicaciones.create') }}" class="btn btn-primary">Agregar Ubicación</a>
     <br><br>
     <form action="{{ route('ubicaciones.buscar') }}" method="GET">
-        <input type="text" name="search" placeholder="Buscar" value="{{ request('search') }}">
+        <input type="text" name="p" placeholder="Buscar" value="{{ request('p') }}">
         <button type="submit">Buscar</button>
     </form>
     <br>
-    <table border="1" cellpadding="5" cellspacing="0">
-        <thead>
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark text-center">
             <tr>
                 <th>ID</th>
                 <th>Nombre</th>

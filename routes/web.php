@@ -6,7 +6,7 @@ use App\Http\Controllers\ResponsableController;
 use App\Http\Controllers\UbicacionController;
 use App\Http\Controllers\ComponenteController;
 use App\Http\Controllers\MovimientoController;
-
+use App\Http\Controllers\BajaController;
 Route::get('/', function () {
     return view('inicio');
 })->name('inicio');
@@ -38,5 +38,16 @@ Route::get('movimientos/create', [MovimientoController::class, 'create'])->name(
 Route::post('movimientos', [MovimientoController::class, 'store'])->name('movimientos.store');
 Route::get('movimientos/buscar', [MovimientoController::class, 'buscar'])->name('movimientos.buscar');
 Route::get('/movimientos/reporte', [MovimientoController::class, 'reporte'])->name('movimientos.reporte');
-Route::post('/movimientos/reporte', [MovimientoController::class, 'generarReporte'])->name('movimientos.generarReporte');
+Route::post('/movimientos/reportes', [MovimientoController::class, 'generarReporte'])->name('movimientos.generarReporte');
 Route::match(['get', 'post'], '/movimientos/storeMultiple', [MovimientoController::class, 'storeMultiple'])->name('movimientos.storeMultiple');
+Route::get('/movimientos/autocomplete', [MovimientoController::class, 'autocomplete'])->name('movimientos.autocomplete');
+
+//rutas de bajas
+
+Route::get('bajas/buscar', [BajaController::class, 'search'])->name('bajas.search');
+Route::get('/bajas', [BajaController::class, 'index'])->name('bajas.index');
+Route::get('/bajas/create', [BajaController::class, 'create'])->name('bajas.create');
+Route::post('/bajas', [BajaController::class, 'store'])->name('bajas.store');
+Route::get('/bajas/reportepdf', [BajaController::class, 'generarReporte'])->name('bajas.generaReporte');
+Route::get('/bajas/reporte', [BajaController::class, 'reporte'])->name('bajas.reporte');
+Route::get('/bajas/autocomplete', [BajaController::class, 'autocomplete'])->name('bajas.autocomplete');

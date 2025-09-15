@@ -32,11 +32,11 @@ class UbicacionController extends Controller
 
     public function buscar(Request $request)
     {
-        $q = $request->input('q');
+        $q = $request->input('p');
 
         $ubicaciones = Ubicacion::when($q, function ($query, $q) {
             $query->where('nombre_ubicacion', 'like', "%$q%")
-                  ->orWhere('descripcion', 'like', "%$q%");
+                ->orWhere('descripcion', 'like', "%$q%");
         })->get();
 
         return view('ubicaciones.index', compact('ubicaciones'));

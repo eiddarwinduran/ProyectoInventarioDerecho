@@ -22,13 +22,13 @@
             </select>
         </div>
         <div class="mb-3">
-            <label for="ci_text" class="form-label">Responsable</label>
+            <label for="ci_text" class="form-label">Nuevo Responsable</label>
             <input type="text" id="ci_text" class="form-control" placeholder="Escribe CI o nombre del responsable" required>
             <input type="hidden" name="ci" id="ci">
         </div>
 
         <div class="mb-3">
-            <label for="ubicacion_text" class="form-label">Ubicación</label>
+            <label for="ubicacion_text" class="form-label">Nueva Ubicación</label>
             <input type="text" id="ubicacion_text" class="form-control" placeholder="Escribe nombre de ubicación" required>
             <input type="hidden" name="id_ubicacion" id="id_ubicacion">
         </div>

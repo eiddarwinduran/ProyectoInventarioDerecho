@@ -25,11 +25,11 @@
 <body>
     <div class="container mt-4">
         <h1>Sistema de Inventario</h1>
-    <a href="{{ route('equipos.index') }}" class="btn btn-primary m-2">Gestión de Equipos</a>
-    <a href="{{ route('responsables.index') }}" class="btn btn-primary m-2">Gestión de Responsables</a>
-    <a href="{{ route('ubicaciones.index') }}" class="btn btn-primary m-2">Gestión de Ubicaciones</a>
-    <a href="{{ route('movimientos.index') }}" class="btn btn-primary">Mostrar Asignaciones</a>
-    <a href="{{ route('movimientos.create') }}" class="btn btn-primary">Asignar Responsable</a>
+    <a href="{{ route('equipos.index') }}" class="btn btn-primary m-2">Gestionar Equipos</a>
+    <a href="{{ route('responsables.index') }}" class="btn btn-primary m-2">Gestionar Responsables</a>
+    <a href="{{ route('ubicaciones.index') }}" class="btn btn-primary m-2">Gestionar Ubicaciones</a>
+    <a href="{{ route('movimientos.index') }}" class="btn btn-primary">Gestionar Asignaciones</a>
+    <a href="{{ route('bajas.index') }}" class="btn btn-primary">Dar de baja</a>
     <a href="{{ route('movimientos.reporte') }}" class="btn btn-primary">Informe</a>
     </div>
     <div class="container mt-4">

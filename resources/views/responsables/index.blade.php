@@ -11,8 +11,8 @@
         <button type="submit">Buscar</button>
     </form>
 
-    <table border="1" cellpadding="5" cellspacing="0">
-        <thead>
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark text-center">
             <tr>
                 <th>ID</th>
                 <th>Nombre</th>
