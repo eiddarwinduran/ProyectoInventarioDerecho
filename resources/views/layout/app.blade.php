@@ -24,7 +24,7 @@
 </head>
 <body>
     <div class="container mt-4">
-        <h1>Sistema de Inventario</h1>
+        <h1>Sistema de Inventario de Equipos Informaticos</h1>
     <a href="{{ route('equipos.index') }}" class="btn btn-primary m-2">Gestionar Equipos</a>
     <a href="{{ route('responsables.index') }}" class="btn btn-primary m-2">Gestionar Responsables</a>
     <a href="{{ route('ubicaciones.index') }}" class="btn btn-primary m-2">Gestionar Ubicaciones</a>
