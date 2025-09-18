@@ -51,3 +51,4 @@ Route::post('/bajas', [BajaController::class, 'store'])->name('bajas.store');
 Route::get('/bajas/reportepdf', [BajaController::class, 'generarReporte'])->name('bajas.generaReporte');
 Route::get('/bajas/reporte', [BajaController::class, 'reporte'])->name('bajas.reporte');
 Route::get('/bajas/autocomplete', [BajaController::class, 'autocomplete'])->name('bajas.autocomplete');
+Route::get('/bajas/get-responsable', [BajaController::class, 'getResponsable'])->name('bajas.getResponsable');

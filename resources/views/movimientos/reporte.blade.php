@@ -36,7 +36,7 @@
             <table class="table table-bordered table-striped">
                 <thead class="table-dark text-center">
                     <tr>
-                        <th>Equipo</th>
+                        <th>Codigo</th>
                         <th>Estado</th>
                         <th>Responsable</th>
                         <th>Ubicación</th>
@@ -47,7 +47,7 @@
                 <tbody>
                     @foreach($movimientos as $mov)
                         <tr>
-                            <td>{{ $mov->equipo->codigo }} - {{ $mov->equipo->descripcion }}</td>
+                            <td>{{ $mov->equipo->codigo }}</td>
                             <td>{{ $mov->estado }}</td>
                             <td>{{ $mov->responsable->nombre }} {{ $mov->responsable->apellido }}</td>
                             <td>{{ $mov->ubicacion->nombre_ubicacion }}</td>

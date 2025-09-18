@@ -17,6 +17,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Código</th>
+                    <th>Responsable</th>
                     <th>Estado</th>
                     <th>Descripción</th>
                     <th>Fecha de Baja</th>
@@ -26,6 +27,7 @@
                 <tr>
                     <td>{{ $baja->id_baja }}</td>
                     <td>{{ $baja->codigo }}</td>
+                    <td>{{ $baja->responsable->nombre ?? '' }} {{ $baja->responsable->apellido ?? '' }}</td>
                     <td>{{ $baja->estado }}</td>
                     <td>{{ $baja->descripcion }}</td>
                     <td>{{ $baja->fecha_baja }}</td>

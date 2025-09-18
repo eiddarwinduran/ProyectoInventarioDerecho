@@ -11,7 +11,7 @@ class BajaController extends Controller
 {
     public function index()
     {
-        $bajas = Baja::with('equipo')->get();
+        $bajas = Baja::with(['equipo', 'responsable'])->get();
         return view('bajas.index', compact('bajas'));
     }
 
@@ -20,6 +20,7 @@ class BajaController extends Controller
         $equipos = Equipo::all();
         return view('bajas.create', compact('equipos'));
     }
+
     public function reporte()
     {
         return view('bajas.reporte');
@@ -32,16 +33,21 @@ class BajaController extends Controller
             'descripcion' => 'nullable|string',
         ]);
 
-        $baja = Baja::create([
-            'codigo' => $request->codigo,
-            'estado' => 'Baja',
-            'descripcion' => $request->descripcion,
-        ]);
-
+        // Recuperar último movimiento del equipo
         $ultimoMovimiento = Movimiento::where('codigo', $request->codigo)
             ->latest('fecha_movimiento')
             ->first();
 
+        // Registrar baja incluyendo responsable (ci)
+        $baja = Baja::create([
+            'codigo' => $request->codigo,
+            'estado' => 'Baja',
+            'descripcion' => $request->descripcion,
+            'ci' => $ultimoMovimiento?->ci, // Guardar último responsable
+            'fecha_baja' => now(),
+        ]);
+
+        // Registrar movimiento de baja
         Movimiento::create([
             'codigo' => $request->codigo,
             'ci' => $ultimoMovimiento?->ci,
@@ -51,7 +57,7 @@ class BajaController extends Controller
             'detalle' => 'Equipo dado de baja: ' . $request->descripcion,
         ]);
 
-        return redirect()->route('bajas.index')->with('success', 'Baja registrada y movimiento actualizado.');
+        return redirect()->route('bajas.index')->with('success', 'Baja registrada con responsable y movimiento actualizado.');
     }
 
     public function search(Request $request)
@@ -61,6 +67,7 @@ class BajaController extends Controller
 
         return view('bajas.index', compact('bajas'));
     }
+
     public function autocomplete(Request $request)
     {
         $term = $request->get('term');
@@ -81,13 +88,29 @@ class BajaController extends Controller
         return response()->json($resultados);
     }
 
+    public function getResponsable(Request $request)
+    {
+        $codigo = $request->get('codigo');
+
+        $ultimoMovimiento = Movimiento::where('codigo', $codigo)
+            ->latest('fecha_movimiento')
+            ->with('responsable')
+            ->first();
+
+        return response()->json([
+            'ci' => $ultimoMovimiento?->ci,
+            'nombre' => $ultimoMovimiento?->responsable->nombre ?? 'Sin responsable',
+            'apellido' => $ultimoMovimiento?->responsable->apellido ?? ''
+        ]);
+    }
+
     public function generarReporte(Request $request)
     {
         $tipo = $request->input('tipo');
         $filtro = $request->input('filtro');
         $accion = $request->input('accion');
 
-        $bajas = Baja::with('equipo')
+        $bajas = Baja::with(['equipo', 'responsable'])
             ->when($tipo == 'codigo', function ($q) use ($filtro) {
                 $q->whereHas('equipo', function ($query) use ($filtro) {
                     $query->where('codigo', $filtro);
@@ -102,7 +125,7 @@ class BajaController extends Controller
             return view('bajas.reporte', compact('bajas', 'tipo', 'filtro'));
         }
 
-        // Acción PDF → generar PDF
+        // Generar PDF con TCPDF
         $pdf = new \TCPDF('P', 'mm', 'Letter', true, 'UTF-8', false);
         $pdf->setPrintHeader(false);
         $pdf->AddPage();
@@ -118,28 +141,32 @@ class BajaController extends Controller
 
         $pdf->SetFont('helvetica', 'B', 9);
         $pdf->Cell(25, 6, 'Codigo', 1, 0, 'C');
+        $pdf->Cell(40, 6, 'Responsable', 1, 0, 'C');
         $pdf->Cell(50, 6, 'Descripcion Equipo', 1, 0, 'C');
         $pdf->Cell(25, 6, 'Fecha Baja', 1, 0, 'C');
         $pdf->Cell(20, 6, 'Estado', 1, 0, 'C');
-        $pdf->Cell(65, 6, 'Motivo', 1, 1, 'C');
+        $pdf->Cell(35, 6, 'Motivo', 1, 1, 'C');
 
         $pdf->SetFont('helvetica', '', 8);
         foreach ($bajas as $baja) {
             $codigo = $baja->codigo ?? '';
+            $responsable = $baja->responsable ? ($baja->responsable->nombre . " " . $baja->responsable->apellido) : 'N/A';
             $descripcionEquipo = $baja->equipo->descripcion ?? 'N/A';
             $fecha = $baja->fecha_baja ?? '';
             $estado = $baja->estado ?? 'N/A';
             $motivo = $baja->descripcion ?? '';
 
             $w_codigo = 25;
+            $w_resp = 40;
             $w_descEq = 50;
             $w_fecha = 25;
             $w_estado = 20;
-            $w_motivo = 65;
+            $w_motivo = 35;
             $h = 6;
 
             $nb = max(
                 $pdf->getNumLines($codigo, $w_codigo),
+                $pdf->getNumLines($responsable, $w_resp),
                 $pdf->getNumLines($descripcionEquipo, $w_descEq),
                 $pdf->getNumLines($fecha, $w_fecha),
                 $pdf->getNumLines($estado, $w_estado),
@@ -149,6 +176,7 @@ class BajaController extends Controller
             $rowHeight = $h * $nb;
 
             $pdf->MultiCell($w_codigo, $rowHeight, $codigo, 1, 'C', 0, 0);
+            $pdf->MultiCell($w_resp, $rowHeight, $responsable, 1, 'L', 0, 0);
             $pdf->MultiCell($w_descEq, $rowHeight, $descripcionEquipo, 1, 'L', 0, 0);
             $pdf->MultiCell($w_fecha, $rowHeight, $fecha, 1, 'C', 0, 0);
             $pdf->MultiCell($w_estado, $rowHeight, $estado, 1, 'C', 0, 0);
@@ -157,5 +185,4 @@ class BajaController extends Controller
 
         $pdf->Output('Reporte_Bajas.pdf', 'I');
     }
-
 }

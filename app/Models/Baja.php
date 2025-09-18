@@ -14,6 +14,7 @@ class Baja extends Model
 
     protected $fillable = [
         'codigo',
+        'ci',
         'fecha_baja',
         'estado',
         'descripcion',
@@ -23,6 +24,10 @@ class Baja extends Model
     public function equipo()
     {
         return $this->belongsTo(Equipo::class, 'codigo', 'codigo');
+    }
+    public function responsable()
+    {
+        return $this->belongsTo(Responsable::class, 'ci', 'ci');
     }
 }
 

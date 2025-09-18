@@ -34,6 +34,7 @@
                     <thead class="table-dark text-center">
                         <tr>
                             <th>Código</th>
+                            <th>Responsable</th>
                             <th>Equipo</th>
                             <th>Fecha Baja</th>
                             <th>Estado</th>
@@ -44,6 +45,7 @@
                         @foreach($bajas as $baja)
                             <tr>
                                 <td class="text-center">{{ $baja->codigo }}</td>
+                                <td class="text-center">{{ $baja->responsable->nombre ?? '' }} {{ $baja->responsable->apellido ?? '' }}</td>
                                 <td>{{ $baja->equipo->descripcion ?? 'N/A' }}</td>
                                 <td class="text-center">{{ $baja->fecha_baja }}</td>
                                 <td class="text-center">{{ $baja->estado }}</td>
