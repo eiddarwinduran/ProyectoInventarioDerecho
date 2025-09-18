@@ -157,6 +157,9 @@ class MovimientoController extends Controller
                         ->orWhere('descripcion', 'like', "%$filtro%");
                 });
             })
+            ->when($tipo == 'anio', function ($q) use ($filtro) {
+                $q->whereYear('fecha_movimiento', $filtro);
+            })
             ->get();
 
         if ($accion === 'buscar') {

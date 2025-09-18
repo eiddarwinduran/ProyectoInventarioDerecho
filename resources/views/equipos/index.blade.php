@@ -28,7 +28,7 @@
                 <th>Procesador</th>
                 <th>Tarjeta Madre</th>
                 <th>RAM</th>
-                <th>Disco Duro</th>
+                <th>Disco Duro/Disco Solido</th>
                 <th>Tarjeta Video</th>
                 <th>Tarjeta Red</th>
             </tr>

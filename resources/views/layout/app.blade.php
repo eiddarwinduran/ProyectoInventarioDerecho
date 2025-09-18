@@ -32,15 +32,6 @@
     <a href="{{ route('bajas.index') }}" class="btn btn-primary">Dar de baja</a>
     <a href="{{ route('movimientos.reporte') }}" class="btn btn-primary">Informe</a>
     </div>
-    <div class="container mt-4">
-    <h3> Buscar Movimientos</h3>
-
-    <form action="{{ route('movimientos.buscar') }}" method="GET" class="d-flex mb-4">
-        <input type="text" name="q" class="form-control me-2" placeholder="Buscar" value="{{ request('q') }}">
-        <button type="submit" class="btn btn-primary">Buscar</button>
-    </form>
-    </div>
-
 
 <div class="container mt-5 pt-5">
     @if(session('success'))

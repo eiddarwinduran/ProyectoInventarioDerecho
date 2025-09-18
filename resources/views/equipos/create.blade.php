@@ -25,8 +25,8 @@
                             <label for="tipo" class="form-label">Tipo de Equipo</label>
                             <select name="tipo" id="tipo" class="form-select" required>
                                 <option value="">-- Seleccione --</option>
-                                <option value="monitor">Monitor</option>
-                                <option value="cpu">CPU</option>
+                                <option value="monitor">Monitor/Impresora/Establizador</option>
+                                <option value="cpu">CPU/Laptop</option>
                             </select>
                         </div>
                     </div>
@@ -48,7 +48,7 @@
                             <input type="text" name="ram" class="form-control">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Disco Duro</label>
+                            <label class="form-label">Disco Duro/Disco Solido</label>
                             <input type="text" name="disco_duro" class="form-control">
                         </div>
                         <div class="mb-3">

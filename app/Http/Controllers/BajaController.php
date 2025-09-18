@@ -74,7 +74,7 @@ class BajaController extends Controller
             ->map(function ($baja) {
                 return [
                     'id' => $baja->id,
-                    'value' => $baja->equipo->codigo 
+                    'value' => $baja->equipo->codigo
                 ];
             });
 
@@ -83,15 +83,18 @@ class BajaController extends Controller
 
     public function generarReporte(Request $request)
     {
-        $tipo = $request->input('tipo');   //codigo
+        $tipo = $request->input('tipo');
         $filtro = $request->input('filtro');
         $accion = $request->input('accion');
 
         $bajas = Baja::with('equipo')
             ->when($tipo == 'codigo', function ($q) use ($filtro) {
                 $q->whereHas('equipo', function ($query) use ($filtro) {
-                    $query->where('codigo', $filtro); 
+                    $query->where('codigo', $filtro);
                 });
+            })
+            ->when($tipo == 'anio', function ($q) use ($filtro) {
+                $q->whereYear('fecha_baja', $filtro);
             })
             ->get();
 
