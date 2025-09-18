@@ -110,7 +110,8 @@ class BajaController extends Controller
         $filtro = $request->input('filtro');
         $accion = $request->input('accion');
 
-        $bajas = Baja::with(['equipo', 'responsable'])
+        // Cargar bajas con responsable, equipo y componentes
+        $bajas = Baja::with(['equipo.componente', 'responsable'])
             ->when($tipo == 'codigo', function ($q) use ($filtro) {
                 $q->whereHas('equipo', function ($query) use ($filtro) {
                     $query->where('codigo', $filtro);
@@ -139,45 +140,49 @@ class BajaController extends Controller
         $pdf->Cell(0, 10, 'Reporte de Bajas', 0, 1, 'C');
         $pdf->Ln(5);
 
-        $pdf->SetFont('helvetica', 'B', 9);
-        $pdf->Cell(25, 6, 'Codigo', 1, 0, 'C');
-        $pdf->Cell(40, 6, 'Responsable', 1, 0, 'C');
-        $pdf->Cell(50, 6, 'Descripcion Equipo', 1, 0, 'C');
+        // Cabecera de la tabla
+        $pdf->SetFont('helvetica', 'B', 8);
+        $pdf->Cell(22, 6, 'Codigo', 1, 0, 'C');
+        $pdf->Cell(35, 6, 'Responsable', 1, 0, 'C');
+        $pdf->Cell(40, 6, 'Descripcion De Equipo', 1, 0, 'C');
         $pdf->Cell(25, 6, 'Fecha Baja', 1, 0, 'C');
-        $pdf->Cell(20, 6, 'Estado', 1, 0, 'C');
-        $pdf->Cell(35, 6, 'Motivo', 1, 1, 'C');
+        $pdf->Cell(15, 6, 'Estado', 1, 0, 'C');
+        $pdf->Cell(30, 6, 'Motivo', 1, 1, 'C');
 
         $pdf->SetFont('helvetica', '', 8);
+
         foreach ($bajas as $baja) {
             $codigo = $baja->codigo ?? '';
             $responsable = $baja->responsable ? ($baja->responsable->nombre . " " . $baja->responsable->apellido) : 'N/A';
             $descripcionEquipo = $baja->equipo->descripcion ?? 'N/A';
-            $fecha = $baja->fecha_baja ?? '';
+
+
+            $desceq = $descripcionEquipo . "\n";
+            $fecha = $baja->fecha_baja ? \Carbon\Carbon::parse($baja->fecha_movimiento)->format('Y-m-d') : '';
             $estado = $baja->estado ?? 'N/A';
             $motivo = $baja->descripcion ?? '';
 
-            $w_codigo = 25;
-            $w_resp = 40;
-            $w_descEq = 50;
+            $w_codigo = 22;
+            $w_resp = 35;
+            $w_desceq = 40;
             $w_fecha = 25;
-            $w_estado = 20;
-            $w_motivo = 35;
+            $w_estado = 15;
+            $w_motivo = 30;
             $h = 6;
 
             $nb = max(
                 $pdf->getNumLines($codigo, $w_codigo),
                 $pdf->getNumLines($responsable, $w_resp),
-                $pdf->getNumLines($descripcionEquipo, $w_descEq),
+                $pdf->getNumLines($desceq, $w_desceq),
                 $pdf->getNumLines($fecha, $w_fecha),
                 $pdf->getNumLines($estado, $w_estado),
                 $pdf->getNumLines($motivo, $w_motivo)
             );
-
             $rowHeight = $h * $nb;
 
             $pdf->MultiCell($w_codigo, $rowHeight, $codigo, 1, 'C', 0, 0);
             $pdf->MultiCell($w_resp, $rowHeight, $responsable, 1, 'L', 0, 0);
-            $pdf->MultiCell($w_descEq, $rowHeight, $descripcionEquipo, 1, 'L', 0, 0);
+            $pdf->MultiCell($w_desceq, $rowHeight, $desceq, 1, 'L', 0, 0);
             $pdf->MultiCell($w_fecha, $rowHeight, $fecha, 1, 'C', 0, 0);
             $pdf->MultiCell($w_estado, $rowHeight, $estado, 1, 'C', 0, 0);
             $pdf->MultiCell($w_motivo, $rowHeight, $motivo, 1, 'L', 0, 1);
@@ -185,4 +190,5 @@ class BajaController extends Controller
 
         $pdf->Output('Reporte_Bajas.pdf', 'I');
     }
+
 }
