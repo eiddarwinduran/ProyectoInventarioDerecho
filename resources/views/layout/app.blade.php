@@ -29,7 +29,7 @@
     <a href="{{ route('responsables.index') }}" class="btn btn-primary m-2">Gestionar Responsables</a>
     <a href="{{ route('ubicaciones.index') }}" class="btn btn-primary m-2">Gestionar Ubicaciones</a>
     <a href="{{ route('movimientos.index') }}" class="btn btn-primary">Gestionar Asignaciones</a>
-    <a href="{{ route('bajas.index') }}" class="btn btn-primary">Dar de baja</a>
+    <a href="{{ route('bajas.index') }}" class="btn btn-primary">Bajas</a>
     <a href="{{ route('movimientos.reporte') }}" class="btn btn-primary">Informe</a>
     </div>
 
