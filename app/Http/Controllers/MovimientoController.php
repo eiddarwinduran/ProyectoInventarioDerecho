@@ -62,7 +62,7 @@ class MovimientoController extends Controller
         } elseif ($tipo === 'ubicacion') {
             $resultados = Ubicacion::where('nombre_ubicacion', 'LIKE', "%{$term}%")
                 ->limit(10)
-                ->select('nombre_ubicacion as label', 'id_ubicacion as value')
+                ->select('nombre_ubicacion as label', 'nombre_ubicacion as value')
                 ->get();
         }
 
