@@ -9,6 +9,10 @@
             <a href="{{ route('movimientos.storeMultiple') }}" class="btn btn-primary">Asignacion Multiple</a>
             <br><br>
         </div>
+        <form action="{{ route('movimientos.buscar') }}" method="GET">
+        <input type="text" name="q" placeholder="Buscar" value="{{ request('q') }}">
+        <button type="submit">Buscar</button>
+    </form>
     </div>
     <br>
     @if(isset($query))

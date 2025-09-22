@@ -33,17 +33,15 @@ class BajaController extends Controller
             'descripcion' => 'nullable|string',
         ]);
 
-        // Recuperar último movimiento del equipo
         $ultimoMovimiento = Movimiento::where('codigo', $request->codigo)
             ->latest('fecha_movimiento')
             ->first();
 
-        // Registrar baja incluyendo responsable (ci)
         $baja = Baja::create([
             'codigo' => $request->codigo,
             'estado' => 'Baja',
             'descripcion' => $request->descripcion,
-            'ci' => $ultimoMovimiento?->ci, // Guardar último responsable
+            'ci' => $ultimoMovimiento?->ci,
             'fecha_baja' => now(),
         ]);
 
@@ -110,7 +108,6 @@ class BajaController extends Controller
         $filtro = $request->input('filtro');
         $accion = $request->input('accion');
 
-        // Cargar bajas con responsable, equipo y componentes
         $bajas = Baja::with(['equipo.componente', 'responsable'])
             ->when($tipo == 'codigo', function ($q) use ($filtro) {
                 $q->whereHas('equipo', function ($query) use ($filtro) {
@@ -126,7 +123,6 @@ class BajaController extends Controller
             return view('bajas.reporte', compact('bajas', 'tipo', 'filtro'));
         }
 
-        // Generar PDF con TCPDF
         $pdf = new \TCPDF('P', 'mm', 'Letter', true, 'UTF-8', false);
         $pdf->setPrintHeader(false);
         $pdf->AddPage();
@@ -140,7 +136,6 @@ class BajaController extends Controller
         $pdf->Cell(0, 10, 'Reporte de Bajas', 0, 1, 'C');
         $pdf->Ln(5);
 
-        // Cabecera de la tabla
         $pdf->SetFont('helvetica', 'B', 8);
         $pdf->Cell(22, 6, 'Codigo', 1, 0, 'C');
         $pdf->Cell(35, 6, 'Responsable', 1, 0, 'C');
