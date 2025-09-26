@@ -4,8 +4,6 @@
 
     <h1>Lista de Responsables</h1>
 
-    <a href="{{ route('responsables.create') }}" class="btn btn-primary">Agregar Responsable</a>
-
     <form action="{{ route('responsables.index') }}" method="GET" style="margin: 20px 0;">
         <input type="text" name="search" placeholder="Buscar" value="{{ request('search') }}">
         <button type="submit">Buscar</button>
@@ -14,7 +12,6 @@
     <table class="table table-bordered table-striped">
         <thead class="table-dark text-center">
             <tr>
-                <th>ID</th>
                 <th>Nombre</th>
                 <th>Apellido</th>
                 <th>CI</th>
@@ -26,7 +23,6 @@
         <tbody>
             @forelse($responsables as $resp)
                 <tr>
-                    <td>{{ $resp->id_responsable }}</td>
                     <td>{{ $resp->nombre }}</td>
                     <td>{{ $resp->apellido }}</td>
                     <td>{{ $resp->ci }}</td>

@@ -3,8 +3,6 @@
 @section('content')
     <div class="container">
         <h1>Reporte de Movimientos</h1>
-        <a href="{{ route('movimientos.reporte') }}" class="btn btn-primary">Informe de Movimiento</a>
-        <a href="{{ route('bajas.reporte') }}" class="btn btn-primary">Informe de Bajas</a>
 
         <form action="{{ route('movimientos.generarReporte') }}" method="POST" class="mb-4">
             @csrf
@@ -37,6 +35,7 @@
                 <thead class="table-dark text-center">
                     <tr>
                         <th>Codigo</th>
+                        <th>Descripcion del Equipo</th>
                         <th>Estado</th>
                         <th>Responsable</th>
                         <th>Ubicación</th>
@@ -48,6 +47,7 @@
                     @foreach($movimientos as $mov)
                         <tr>
                             <td>{{ $mov->equipo->codigo }}</td>
+                            <td>{{ $mov->equipo->descripcion }}</td>
                             <td>{{ $mov->estado }}</td>
                             <td>{{ $mov->responsable->nombre }} {{ $mov->responsable->apellido }}</td>
                             <td>{{ $mov->ubicacion->nombre_ubicacion }}</td>

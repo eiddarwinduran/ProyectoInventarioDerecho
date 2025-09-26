@@ -1,17 +1,13 @@
 @extends('layout.app')
 
 @section('content')
-    <h1>Lista de Equipos</h1>
+    <h2>Lista de Equipos</h2>
 
     @if(session('success'))
         <div style="color: green;">
             {{ session('success') }}
         </div>
     @endif
-
-    <a href="{{ route('equipos.create') }}" class="btn btn-primary">Crear Nuevo Equipo</a>
-    <br><br>
-
 
     <form action="{{ route('equipos.index') }}" method="GET">
         <input type="text" name="search" placeholder="Buscar por código o descripción..." value="{{ request('search') }}">
@@ -22,7 +18,6 @@
     <table class="table table-bordered table-striped">
         <thead class="table-dark text-center">
             <tr>
-                <th>ID</th>
                 <th>Código</th>
                 <th>Descripción</th>
                 <th>Procesador</th>
@@ -36,7 +31,6 @@
         <tbody>
             @forelse($equipos as $equipo)
                 <tr>
-                    <td>{{ $equipo->id_equipo }}</td>
                     <td>{{ $equipo->codigo }}</td>
                     <td>{{ $equipo->descripcion }}</td>
                     <td>{{ $equipo->componente->procesador ?? '' }}</td>

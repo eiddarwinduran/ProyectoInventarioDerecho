@@ -3,8 +3,6 @@
 @section('content')
     <div class="container mt-4">
         <h2>Reporte de Bajas</h2>
-        <a href="{{ route('movimientos.reporte') }}" class="btn btn-primary">Informe de Movimiento</a>
-        <a href="{{ route('bajas.reporte') }}" class="btn btn-primary">Informe de Bajas</a>
 
         <form action="{{ route('bajas.generaReporte') }}" method="GET" class="mb-4">
             <div class="row g-2">

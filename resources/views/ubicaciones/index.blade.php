@@ -3,8 +3,6 @@
 @section('content')
     <h1>Lista de Ubicaciones</h1>
 
-    <a href="{{ route('ubicaciones.create') }}" class="btn btn-primary">Agregar Ubicación</a>
-    <br><br>
     <form action="{{ route('ubicaciones.buscar') }}" method="GET">
         <input type="text" name="p" placeholder="Buscar" value="{{ request('p') }}">
         <button type="submit">Buscar</button>
@@ -13,7 +11,6 @@
     <table class="table table-bordered table-striped">
         <thead class="table-dark text-center">
             <tr>
-                <th>ID</th>
                 <th>Nombre</th>
                 <th>Descripción</th>
             </tr>
@@ -21,7 +18,6 @@
         <tbody>
             @foreach($ubicaciones as $ubi)
                 <tr>
-                    <td>{{ $ubi->id_ubicacion }}</td>
                     <td>{{ $ubi->nombre_ubicacion }}</td>
                     <td>{{ $ubi->descripcion }}</td>
                 </tr>

@@ -1,45 +1,125 @@
-<!DOCTYPE html>
-<html lang="es">
+<!DOCTYPE HTML>
+<html>
+
 <head>
-   <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        th, td {
-            padding: 8px 12px;
-            border: 1px solid #ccc;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        a {
-            text-decoration: none;
-            color: blue;
-        }
-    </style>
-    <title>Inventario USFX</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <title>Editorial by HTML5 UP</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
 </head>
-<body>
-    <div class="container mt-4">
-        <h1>Sistema de Inventario de Equipos Informaticos</h1>
-    <a href="{{ route('equipos.index') }}" class="btn btn-primary m-2">Gestionar Equipos</a>
-    <a href="{{ route('responsables.index') }}" class="btn btn-primary m-2">Gestionar Responsables</a>
-    <a href="{{ route('ubicaciones.index') }}" class="btn btn-primary m-2">Gestionar Ubicaciones</a>
-    <a href="{{ route('movimientos.index') }}" class="btn btn-primary">Gestionar Asignaciones</a>
-    <a href="{{ route('bajas.index') }}" class="btn btn-primary">Bajas</a>
-    <a href="{{ route('movimientos.reporte') }}" class="btn btn-primary">Informe</a>
+
+<body class="is-preload">
+
+    <!-- Wrapper -->
+    <div id="wrapper">
+
+        <!-- Main -->
+        <div id="main">
+            <div class="inner">
+
+                <!-- Header -->
+                <header id="header">
+                    <h2>Sistema de Inventario de Equipos Informaticos</h2>
+                    <ul class="icons">
+                        <li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+                        <li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+                        <li><a href="#" class="icon brands fa-snapchat-ghost"><span class="label">Snapchat</span></a>
+                        </li>
+                        <li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+                        <li><a href="#" class="icon brands fa-medium-m"><span class="label">Medium</span></a></li>
+                    </ul>
+                </header>
+
+                <!-- Section -->
+                <div class="container mt-5 pt-5">
+                    @if(session('success'))
+                        <div class="alert alert-success">{{ session('success') }}</div>
+                    @endif
+
+
+                    @yield('content')
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div id="sidebar">
+            <div class="inner">
+                <!-- Menu -->
+                <nav id="menu">
+                    <header class="major">
+                        <h2>Menu</h2>
+                    </header>
+                    <ul>
+                        <li><a href="{{ route('inicio') }}">Inicio</a></li>
+                        <li>
+                            <span class="opener">Equipos</span>
+                            <ul>
+                                <li><a href="{{ route('equipos.index') }}">Lista de Equipos</a></li>
+                                <li><a href="{{ route('equipos.create') }}">Crear Nuevo Equipo</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <span class="opener">Responsables</span>
+                            <ul>
+                                <li><a href="{{ route('responsables.index') }}">Lista de Responsables</a></li>
+                                <li><a href="{{ route('responsables.create') }}">Agregar Nuevo Responsable</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <span class="opener">Movimientos</span>
+                            <ul>
+                                <li><a href="{{ route('movimientos.index') }}">Lista de Movimientos</a></li>
+                                <li><a href="{{ route('movimientos.create') }}">Crear Nueva Asignacion</a></li>
+                                <li><a href="{{ route('movimientos.storeMultiple') }}">Crear Nueva Asignacion\ Multiple</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <span class="opener">Ubicaciones</span>
+                            <ul>
+                                <li><a href="{{ route('ubicaciones.index') }}">Lista de Ubicaciones</a></li>
+                                <li><a href="{{ route('ubicaciones.create') }}">Agregar Nueva Ubicacion</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <span class="opener">Bajas</span>
+                            <ul>
+                                <li><a href="{{ route('bajas.index') }}">Lista de Bajas</a></li>
+                                <li><a href="{{ route('bajas.create') }}">Dar de Baja</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <span class="opener">Informe</span>
+                            <ul>
+                                <li><a href="{{ route('movimientos.reporte') }}">Informe de Movimientos</a></li>
+                                <a href="{{ route('bajas.reporte') }}">Informe de Bajas</a>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+
+                <!-- Footer -->
+                <footer id="footer">
+                    <p class="copyright">&copy; Untitled. All rights reserved. Demo Images: <a
+                            href="https://unsplash.com">Unsplash</a>. Design: <a href="https://html5up.net">HTML5
+                            UP</a>.</p>
+                </footer>
+
+            </div>
+        </div>
+
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<div class="container mt-5 pt-5">
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
 
-    @yield('content')
-</div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('assets/js/browser.min.js') }}"></script>
+    <script src="{{ asset('assets/js/breakpoints.min.js') }}"></script>
+    <script src="{{ asset('assets/js/util.js') }}"></script>
+    <script src="{{ asset('assets/js/main.js') }}"></script>
+
 </body>
+
 </html>

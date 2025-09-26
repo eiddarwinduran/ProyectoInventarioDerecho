@@ -2,8 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h2>Gestión de Bajas</h2>
-        <a href="{{ route('bajas.create') }}" class="btn btn-primary">Dar de Baja</a>
+        <h2>Lista de Bajas</h2>
         <hr>
         <form action="{{ route('bajas.search') }}" method="GET">
             <input type="text" name="codigo" placeholder="Buscar por código">
