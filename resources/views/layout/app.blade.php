@@ -16,18 +16,9 @@
         <!-- Main -->
         <div id="main">
             <div class="inner">
-
-                <!-- Header -->
                 <header id="header">
-                    <h2>Sistema de Inventario de Equipos Informaticos</h2>
-                    <ul class="icons">
-                        <li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
-                        <li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
-                        <li><a href="#" class="icon brands fa-snapchat-ghost"><span class="label">Snapchat</span></a>
-                        </li>
-                        <li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
-                        <li><a href="#" class="icon brands fa-medium-m"><span class="label">Medium</span></a></li>
-                    </ul>
+                    <h2>Facultad de Derecho, Ciencias Politicas y Sociales <br>
+                        Sistema de Inventario de Equipos Informaticos</h2>
                 </header>
 
                 <!-- Section -->
@@ -49,6 +40,7 @@
                 <!-- Menu -->
                 <nav id="menu">
                     <header class="major">
+                        <img src="{{ asset('images/escudo.png') }}" alt="" height="60px">
                         <h2>Menu</h2>
                     </header>
                     <ul>
@@ -72,7 +64,8 @@
                             <ul>
                                 <li><a href="{{ route('movimientos.index') }}">Lista de Movimientos</a></li>
                                 <li><a href="{{ route('movimientos.create') }}">Crear Nueva Asignacion</a></li>
-                                <li><a href="{{ route('movimientos.storeMultiple') }}">Crear Nueva Asignacion\ Multiple</a></li>
+                                <li><a href="{{ route('movimientos.storeMultiple') }}">Crear Nueva Asignacion\
+                                        Multiple</a></li>
                             </ul>
                         </li>
                         <li>
@@ -101,9 +94,7 @@
 
                 <!-- Footer -->
                 <footer id="footer">
-                    <p class="copyright">&copy; Untitled. All rights reserved. Demo Images: <a
-                            href="https://unsplash.com">Unsplash</a>. Design: <a href="https://html5up.net">HTML5
-                            UP</a>.</p>
+                    <p class="copyright">&copy; Facultad de Derecho, Ciencias Politicas y Sociales</p>
                 </footer>
 
             </div>
@@ -119,7 +110,7 @@
     <script src="{{ asset('assets/js/breakpoints.min.js') }}"></script>
     <script src="{{ asset('assets/js/util.js') }}"></script>
     <script src="{{ asset('assets/js/main.js') }}"></script>
-
+@yield('scripts')
 </body>
 
 </html>

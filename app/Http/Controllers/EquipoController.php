@@ -26,23 +26,24 @@ class EquipoController extends Controller
     }
 
     public function buscar(Request $request)
-    {
-        $q = $request->input('q');
+{
+    $q = $request->input('q');
 
-        $equipos = Equipo::when($q, function ($query, $q) {
-            $query->where('codigo', 'like', "%$q%")
-                ->orWhere('descripcion', 'like', "%$q%");
-        })->get();
+    $equipos = Equipo::when($q, function ($query, $q) {
+        $query->where('codigo', 'like', "%$q%")
+            ->orWhere('descripcion', 'like', "%$q%");
+    })->get();
 
-        $results = $equipos->map(function ($eq) {
-            return [
-                'id' => $eq->codigo,
-                'text' => $eq->codigo
-            ];
-        });
+    $results = $equipos->map(function ($eq) {
+        return [
+            'id' => $eq->codigo, // valor que se enviará
+            'text' => $eq->codigo,
+        ];
+    });
 
-        return response()->json($results);
-    }
+    return response()->json($results);
+}
+
 
 
 

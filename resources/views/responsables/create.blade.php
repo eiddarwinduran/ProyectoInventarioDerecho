@@ -1,7 +1,7 @@
 @extends('layout.app')
 
 @section('content')
-    <h1>Agregar Responsable</h1>
+    <h2>Agregar Responsable</h2>
 
     <form action="{{ route('responsables.store') }}" method="POST">
         @csrf

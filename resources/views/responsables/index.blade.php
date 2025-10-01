@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <h1>Lista de Responsables</h1>
+    <h2>Lista de Responsables</h2>
 
     <form action="{{ route('responsables.index') }}" method="GET" style="margin: 20px 0;">
         <input type="text" name="search" placeholder="Buscar" value="{{ request('search') }}">

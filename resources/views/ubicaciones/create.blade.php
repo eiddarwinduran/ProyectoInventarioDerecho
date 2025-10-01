@@ -1,7 +1,7 @@
 @extends('layout.app')
 
 @section('content')
-    <h1>Agregar Ubicación</h1>
+    <h2>Agregar Ubicación</h2>
 
     <form action="{{ route('ubicaciones.store') }}" method="POST">
         @csrf

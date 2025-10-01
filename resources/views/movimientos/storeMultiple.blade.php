@@ -1,10 +1,5 @@
 @extends('layout.app')
-
 @section('content')
-    <div>
-        <a href="{{ route('movimientos.create') }}" class="btn btn-primary">Asignar Responsable</a>
-        <a href="{{ route('movimientos.storeMultiple') }}" class="btn btn-primary">Asignacion Multiple</a>
-    </div>
     <form action="{{ route('movimientos.storeMultiple') }}" method="POST" id="form-movimientos">
         @csrf
 
@@ -12,6 +7,7 @@
             <label for="equipos" class="form-label">Seleccionar Equipos</label>
             <select name="equipos[]" id="equipos" class="form-select" multiple required></select>
         </div>
+
         <div class="mb-3">
             <label for="estado" class="form-label">Estado</label>
             <select name="estado" class="form-select">
@@ -19,21 +15,25 @@
                 <option value="Baja">Baja</option>
             </select>
         </div>
+
         <div class="mb-3">
             <label for="ci_text" class="form-label">Nuevo Responsable</label>
             <input type="text" id="ci_text" class="form-control" placeholder="Busca responsable" required>
             <input type="hidden" name="ci" id="ci_hidden">
         </div>
+
         <div class="mb-3">
             <label for="ubicacion_text" class="form-label">Ubicación</label>
             <input type="text" id="ubicacion_text" class="form-control" placeholder="Busca ubicación" required>
             <input type="hidden" name="id_ubicacion" id="id_ubicacion_hidden">
         </div>
+
         <div class="mb-3">
             <label for="fecha_movimiento" class="form-label">Fecha Movimiento</label>
             <input type="date" name="fecha_movimiento" id="fecha_movimiento" class="form-control"
                 value="{{ date('Y-m-d') }}" required>
         </div>
+
         <div class="mb-3">
             <label for="detalle" class="form-label">Detalle</label>
             <textarea name="detalle" id="detalle" class="form-control"></textarea>
@@ -41,32 +41,41 @@
 
         <button type="submit" class="btn btn-primary">Asignar</button>
     </form>
+@endsection
+
+@section('scripts')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
 
     <script>
         $(document).ready(function () {
             $('#equipos').select2({
-                placeholder: "Buscar y selecciona equipos",
+                placeholder: "Buscar y seleccionar equipos",
                 ajax: {
                     url: '{{ route("equipos.buscar") }}',
                     dataType: 'json',
                     delay: 250,
-                    data: function (params) { return { q: params.term }; },
-                    processResults: function (data) { return { results: data }; },
+                    data: function (params) {
+                        return { q: params.term };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    },
                     cache: true
                 },
-                minimumInputLength: 1
+                minimumInputLength: 2,
+                width: '100%'
+                
             });
 
             var responsables = [
                 @foreach($responsables as $resp)
-                    { label: "{{ $resp->ci }}  {{ $resp->nombre }} {{ $resp->apellido }}", value: "{{ $resp->ci }}" },
+                    { label: "{{ $resp->ci }} - {{ $resp->nombre }} {{ $resp->apellido }}", value: "{{ $resp->ci }}" },
                 @endforeach
-        ];
+                            ];
+
             $("#ci_text").autocomplete({
                 source: responsables,
                 select: function (event, ui) {
@@ -80,7 +89,8 @@
                 @foreach($ubicaciones as $ubi)
                     { label: "{{ $ubi->nombre_ubicacion }}", value: "{{ $ubi->id_ubicacion }}" },
                 @endforeach
-        ];
+                            ];
+
             $("#ubicacion_text").autocomplete({
                 source: ubicaciones,
                 select: function (event, ui) {
@@ -89,7 +99,6 @@
                     return false;
                 }
             });
-
         });
     </script>
 @endsection

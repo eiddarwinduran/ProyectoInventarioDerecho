@@ -95,6 +95,7 @@
 
             <button type="submit" class="btn btn-primary">Guardar Equipo</button>
             <a href="{{ route('equipos.index') }}" class="btn btn-secondary ms-2">Regresar</a>
+            
         </form>
     </div>
 

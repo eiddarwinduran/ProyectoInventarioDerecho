@@ -1,10 +1,6 @@
 @extends('layout.app')
 
 @section('content')
-    <div>
-        <a href="{{ route('movimientos.create') }}" class="btn btn-primary">Asignar Responsable</a>
-        <a href="{{ route('movimientos.storeMultiple') }}" class="btn btn-primary">Asignacion Multiple</a>
-    </div>
 
     <form action="{{ route('movimientos.store') }}" method="POST">
         @csrf

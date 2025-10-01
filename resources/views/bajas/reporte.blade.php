@@ -8,6 +8,7 @@
             <div class="row g-2">
                 <div class="col-md-3">
                     <select name="tipo" id="tipo" class="form-select" required>
+                        <option value="fil" >--Filtrar Por--</option>
                         <option value="codigo" {{ (isset($tipo) && $tipo == 'codigo') ? 'selected' : '' }}>Por Código</option>
                         <option value="anio" {{ (isset($tipo) && $tipo == 'anio') ? 'selected' : '' }}>Por Año</option>
                     </select>

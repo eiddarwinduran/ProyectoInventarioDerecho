@@ -1,7 +1,7 @@
 @extends('layout.app') 
 
 @section('content')
-    <h1>Resultado</h1>
+    <h2>Lista de Movimientos</h2>
 
     <form action="{{ route('movimientos.buscar') }}" method="GET">
         <input type="text" name="q" placeholder="Buscar" value="{{ request('q') }}">
