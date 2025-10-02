@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\IPsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EquipoController;
 use App\Http\Controllers\ResponsableController;
@@ -52,3 +53,11 @@ Route::get('/bajas/reportepdf', [BajaController::class, 'generarReporte'])->name
 Route::get('/bajas/reporte', [BajaController::class, 'reporte'])->name('bajas.reporte');
 Route::get('/bajas/autocomplete', [BajaController::class, 'autocomplete'])->name('bajas.autocomplete');
 Route::get('/bajas/get-responsable', [BajaController::class, 'getResponsable'])->name('bajas.getResponsable');
+
+//rutas de ips
+Route::get('ips', [IPsController::class, 'index'])->name('ips.index');
+Route::get('ips/create', [IPsController::class, 'create'])->name('ips.create');
+Route::get('ips/buscar', [IPsController::class, 'buscar'])->name('ips.buscar');
+Route::post('ips', [IPsController::class, 'store'])->name('ips.store');
+Route::get('ips/{id}/edit', [IPsController::class, 'edit'])->name('ips.edit');
+Route::put('ips/{id}', [IPsController::class, 'update'])->name('ips.update');

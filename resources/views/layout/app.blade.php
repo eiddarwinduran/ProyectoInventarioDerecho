@@ -53,6 +53,13 @@
                             </ul>
                         </li>
                         <li>
+                            <span class="opener">IPs</span>
+                            <ul>
+                                <li><a href="{{ route('ips.index') }}">Lista de IPs asignados</a></li>
+                                <li><a href="{{ route('ips.create') }}">Asignar IP a equipo</a></li>
+                            </ul>
+                        </li>
+                        <li>
                             <span class="opener">Responsables</span>
                             <ul>
                                 <li><a href="{{ route('responsables.index') }}">Lista de Responsables</a></li>
