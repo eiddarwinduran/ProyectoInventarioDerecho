@@ -15,6 +15,7 @@ class IPs extends Model
 
     protected $fillable = [
         'codigo',
+        'id_ubicacion',
         'ip',
         'mac',
         'subred',
@@ -26,5 +27,9 @@ class IPs extends Model
     public function equipo()
     {
         return $this->belongsTo(Equipo::class, 'codigo', 'codigo');
+    }
+    public function ubicacion()
+    {
+        return $this->belongsTo(Ubicacion::class, 'id_ubicacion', 'id_ubicacion');
     }
 }

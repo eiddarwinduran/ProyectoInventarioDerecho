@@ -20,7 +20,9 @@ return new class extends Migration
             $table->string('mac',60)->nullable();
             $table->string('puerto',20)->nullable();
             $table->string('switch',50)->nullable();
+            $table->unsignedBigInteger('id_ubicacion');
             // Relación con equipos 
+            $table->foreign('id_ubicacion')->references('id_ubicacion')->on('ubicaciones')->onDelete('cascade');
             $table->foreign('codigo')->references('codigo')->on('equipos')->onDelete('cascade');
             $table->timestamps();
         });

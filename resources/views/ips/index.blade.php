@@ -17,6 +17,7 @@
         <thead class="table-dark text-center">
             <tr>
                 <th>Codigo de Equipo</th>
+                <th>Ubicacion</th>
                 <th>IP</th>
                 <th>Subred</th>
                 <th>Gateway</th>
@@ -30,6 +31,7 @@
             @forelse($ips as $ip)
                 <tr>
                     <td>{{ $ip->equipo->codigo ?? 'N/A' }}</td>
+                    <td>{{ $ip->ubicacion->nombre_ubicacion ?? 'N/A' }}</td>
                     <td>{{ $ip->ip }}</td>
                     <td>{{ $ip->subred ?? 'N/A' }}</td>
                     <td>{{ $ip->gateway ?? 'N/A' }} </td>

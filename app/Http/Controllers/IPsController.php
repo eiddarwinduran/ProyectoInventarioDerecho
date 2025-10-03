@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\IPs;
 use App\Models\Equipo;
+use App\Models\Ubicacion;
 
 use TCPDF;
 
@@ -18,13 +19,15 @@ class IPsController extends Controller
     public function create()
     {
         $equipos = Equipo::all();
+        $ubicaciones = Ubicacion::all();
         $ips = IPs::all();
-        return view('ips.create', compact('equipos'));
+        return view('ips.create', compact('equipos', 'ubicaciones'));
     }
     public function store(Request $request)
     {
         $validated = $request->validate([
             'codigo' => 'required|exists:equipos,codigo',
+            'id_ubicacion' => 'required|exists:ubicaciones,id_ubicacion',
             'ip' => 'required',
             'subred' => 'nullable',
             'gateway' => 'nullable',
@@ -39,14 +42,16 @@ class IPsController extends Controller
     }
     public function edit($id)
     {
+        $ubicaciones = Ubicacion::all();
         $ip = IPs::with('equipo')->findOrFail($id);
-        return view('ips.edit', compact('ip'));
+        return view('ips.edit', compact('ip','ubicaciones'));
     }
 
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
             'ip' => 'required',
+            'id_ubicacion' => 'required|exists:ubicaciones,id_ubicacion',
             'subred' => 'nullable',
             'gateway' => 'nullable',
             'mac' => 'nullable',
