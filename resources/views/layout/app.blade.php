@@ -51,7 +51,7 @@
                             <span class="opener">Equipos</span>
                             <ul>
                                 <li><a href="{{ route('equipos.index') }}">Lista de Equipos</a></li>
-                                <li><a href="{{ route('equipos.create') }}">Crear Nuevo Equipo</a></li>
+                                <li><a href="{{ route('equipos.create') }}">Registrar Nuevo Equipo</a></li>
                             </ul>
                         </li>
                         <li>

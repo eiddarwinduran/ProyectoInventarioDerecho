@@ -22,7 +22,7 @@
                         <label for="tipo" class="form-label">Tipo de Equipo</label>
                         <select name="tipo" id="tipo" class="form-select" required>
                             <option value="">-- Seleccione --</option>
-                            <option value="monitor">Monitor / Impresora / Estabilizador / Proyector</option>
+                            <option value="monitor">Monitor/Impresora/Estabilizador/Proyector/Switch/Rack</option>
                             <option value="cpu">CPU / Laptop</option>
                         </select>
                     </div>
